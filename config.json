@@ -8,19 +8,20 @@
   "machine_learning_course": true,
   "deep_learning_course": true,
   "paper_list": [
-    "paper 1",
-    "paper 2"
+    "论文一",
+    "论文二"
   ],
   "experiment_list": [
-    "exp 1",
-    "exp 2"
+    "实验一",
+    "实验二"
   ],
   "task_list": [
     "task 1",
     "task 2"
   ],
-  "others": [
-    "要加快进度。"
+  "others_list": [
+    "要加快进度。",
+    "要注重时间管理。"
   ],
   "ml_course_list": [
     "W1 单变量线性回归",

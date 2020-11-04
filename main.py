@@ -1,6 +1,8 @@
-from docx import Document
 import datetime
 import json
+import os
+import random
+from docx import Document
 
 
 def load_config(filename="./config.json"):
@@ -23,12 +25,7 @@ def date_generator(week_num=8, working_day_num=5):
             date += delta
 
 
-def content_generator(config, num):
-    paper_list = config["paper_list"]
-    experiment_list = config["experiment_list"]
-    task_list = config["task_list"]
-    course_list = []
-
+def generate_content_list(config, num):
     content = {"student_name": config["student_name"],
                "id": config["id"],
                "lab_name": config["lab_name"],
@@ -44,8 +41,44 @@ def content_generator(config, num):
                "others_1": "",
                "others_2": ""
                }
-    while True:
-        yield content
+    content_list = [content for _ in range(num)]
+    paper_list = config["paper_list"]
+    paper_list = ["阅读论文 " + paper for paper in paper_list]
+    experiment_list = config["experiment_list"]
+    experiment_list = ["进行实验" + experiment for experiment in experiment_list]
+    task_list = config["task_list"]
+    task_list.extend(paper_list)
+    task_list.extend(experiment_list)
+    others_list = config["others_list"]
+    if len(task_list) < num:
+        repeat_num = num - len(task_list)
+        for _ in range(repeat_num):
+            random_index = random.randint(0, len(task_list) - 1)
+            task_list.insert(random_index, task_list[random_index])
+    assert len(task_list) >= num
+    course_list = []
+    if config["machine_learning_course"]:
+        course_list.extend(config["ml_course_list"])
+    if config["deep_learning_course"]:
+        course_list.extend(config["dl_course_list"])
+    course_list = ["学习课程 " + course for course in course_list]
+    for i in range(len(content_list)):
+        if i < len(course_list):
+            content_list[i]["todo_task_1"] = "完成相关课程的学习"
+            content_list[i]["todo_task_2"] = "读相关的论文"
+            content_list[i]["progress_2"] = course_list[i]
+            if i + 1 != len(course_list):
+                content_list[i]["tomorrow_plan_2"] = course_list[i + 1]
+        else:
+            content_list[i]["todo_task_1"] = "完成所要求的实验"
+            content_list[i]["todo_task_2"] = "读相关的论文"
+        content_list[i]["progress_1"] = task_list[i]
+        if i + 1 != len(task_list):
+            content_list[i]["tomorrow_plan_1"] = task_list[i + 1]
+        if random.random() > 0.5:
+            content_list[i]["others_1"] = random.choice(others_list)
+
+    return content_list
 
 
 def generate_log(content):
@@ -68,15 +101,17 @@ def generate_log(content):
 
 
 def main():
+    if not os.path.exists("generated"):
+        os.makedirs("generated")
     cfg = load_config()
     week_num = 8
     working_day_num = 5
     date = date_generator(week_num, working_day_num)
-    content = content_generator(cfg, week_num * working_day_num)
-    for current_date in date:
-        current_content = next(content)
-        current_content["date"] = current_date
-        generate_log(current_content)
+    content_list = generate_content_list(cfg, week_num * working_day_num)
+    for content in content_list:
+        current_date = next(date)
+        content["date"] = current_date
+        generate_log(content)
 
 
 if __name__ == '__main__':
