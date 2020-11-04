@@ -41,7 +41,7 @@ def generate_content_list(config, num):
                "others_1": "",
                "others_2": ""
                }
-    content_list = [content for _ in range(num)]
+    content_list = [content.copy() for _ in range(num)]
     paper_list = config["paper_list"]
     paper_list = ["阅读论文 " + paper for paper in paper_list]
     experiment_list = config["experiment_list"]
