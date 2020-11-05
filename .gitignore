@@ -4,3 +4,4 @@ __pycache__
 *.pyc
 generated
 ~*.docx
+test.json

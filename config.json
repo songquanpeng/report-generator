@@ -1,6 +1,6 @@
 {
   "student_name": "张三",
-  "id": "2017********",
+  "student_id": "2017********",
   "major": "计算机科学与技术",
   "lab_name": "混元功法研究实验室",
   "tutor_name": "马保国带师",
@@ -9,7 +9,7 @@
   "deep_learning_course": true,
   "paper_list": [
     "论文一",
-    "论文二"
+    "论文二 bridge"
   ],
   "experiment_list": [
     "实验一",
