@@ -4,6 +4,7 @@ import os
 import random
 from docx import Document
 import locale
+import pywintypes, win32file, win32con
 
 locale.setlocale(locale.LC_CTYPE, 'chinese')
 
@@ -84,6 +85,23 @@ def generate_content_list(config, num):
     return content_list
 
 
+def update_file_time(filename, date):
+    new_datetime = datetime.datetime.now()
+    new_datetime = new_datetime.replace(month=int(date[:2]), day=int(date[5:7]), hour=21, minute=random.randint(1, 59))
+    timestamp = datetime.datetime.timestamp(new_datetime)
+    os.utime(filename, (timestamp, timestamp))
+    if os.name == "nt":
+        win_time = pywintypes.Time(new_datetime)
+        win_file = win32file.CreateFile(
+            filename, win32con.GENERIC_WRITE,
+            win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE | win32con.FILE_SHARE_DELETE,
+            None, win32con.OPEN_EXISTING,
+            win32con.FILE_ATTRIBUTE_NORMAL, None)
+
+        win32file.SetFileTime(win_file, win_time, None, None)
+        win_file.close()
+
+
 def generate_log(content):
     date = content["date"]
     print(f"Generating log for day: {date}...", end=" ")
@@ -100,6 +118,7 @@ def generate_log(content):
                                 run.text = run.text.replace(key, content[key])
                                 break
     doc.save(target_filename)
+    update_file_time(target_filename, date)
     print("Done.")
 
 
