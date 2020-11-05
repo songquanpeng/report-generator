@@ -3,10 +3,13 @@ import json
 import os
 import random
 from docx import Document
+import locale
+
+locale.setlocale(locale.LC_CTYPE, 'chinese')
 
 
 def load_config(filename="./config.json"):
-    with open(filename) as f:
+    with open(filename, encoding="utf-8") as f:
         config = json.load(f)
     if config["student_name"] == "张三":
         print("警告：似乎你忘记修改了 config.json 文件。")
