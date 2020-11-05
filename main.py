@@ -30,7 +30,7 @@ def date_generator(week_num=8, working_day_num=5):
 
 def generate_content_list(config, num):
     content = {"student_name": config["student_name"],
-               "id": config["id"],
+               "student_id": config["student_id"],
                "lab_name": config["lab_name"],
                "major": config["major"],
                "tutor_name": config["tutor_name"],
