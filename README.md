@@ -10,6 +10,12 @@ pip install python-docx
 3. 运行脚本：`python main.py`
 4. 生成的文件在 generated 目录下。
 
+
+## 打包
+```bash
+pyinstaller --hiddenimport win32timezone -F main.py
+```
+
 ## 注意
 1. 仅供用于完成重复性内容的书写，其余部分请自行补全，请认真对待实习日志！
 2. 由因使用本生成器所导致的任何后果均由使用者本人承担。
