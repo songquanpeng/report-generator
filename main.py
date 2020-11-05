@@ -20,7 +20,7 @@ def date_generator(week_num=8, working_day_num=5):
     date = datetime.datetime.strptime("08-31", "%m-%d")
     for week in range(week_num):
         for working_day in range(working_day_num):
-            yield date.strftime("%m 月 %d 日")
+            yield date.strftime("%m {m} %d {d}").format(m='月', d='日')
             if working_day == working_day_num - 1:
                 delta = datetime.timedelta(days=3)
             else:
